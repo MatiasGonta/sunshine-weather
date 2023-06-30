@@ -1,0 +1,123 @@
+.sidebar {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    width: 35vw;
+    height: 100vh;
+
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background-color: rgba(110,110,100,0.25);
+    color: #4d4d4d;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    z-index: 1;
+    overflow-y: scroll;
+
+    h3 {
+        font-size: 22px;
+    }
+
+    .search-box {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        width: 30vw;
+        height: 60px;
+        margin: 20px 0;
+        background: #fff;
+        border-radius: 50px;
+        opacity: 0.6;
+
+        * {
+            border: none;
+            font-size: 22px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 75%;
+            height: 60px;
+            border-radius: 50px;
+        
+            background-color: #fff;
+
+            input {
+                background-color: #fff;
+                width: 65%;
+                height: 60px;
+                outline: none;
+            }
+
+            button{
+                min-width: 40px;
+                min-height: 40px;
+                border-radius: 50%;
+                color: rgb(20, 30, 48);
+                background-color: #c3dee9;
+                cursor: pointer;
+            }
+        }
+    }
+    
+    .history {
+        h3:hover {
+            color: #fff;
+        }
+
+        ul {
+            width: 25vw;
+            padding-bottom: 1em;
+            margin: 2em 0;
+            border-bottom: 1px solid rgb(255, 255, 255,0.6);
+            list-style: none;
+
+            li {
+                margin: 2.5em 0;
+                cursor: pointer;
+
+                &:hover {
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    .weather-details {
+        width: 25vw;
+        margin: 2em 0;
+    
+        display: flex;
+        flex-direction: column;
+        cursor: default;
+
+        i {
+            font-size: 22px;
+            margin-right: 10px;
+        
+            align-self: center;
+        }        
+
+        h3:hover, i:hover, p:hover, span:hover {
+            color: #fff;
+        }
+
+        #cloudy, #humidity, #wind {
+            display: flex;
+            flex-direction: row;
+        
+            margin: 1em 0;
+        }
+    }
+}

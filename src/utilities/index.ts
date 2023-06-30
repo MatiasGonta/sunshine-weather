@@ -1,1 +1,1 @@
-export * from './fetchWeatherData';
+export * from './formatTime';

@@ -1,0 +1,27 @@
+.weather-display {
+    color: #fff;
+    width: 60vw;
+    height: 100vh;
+    padding: 50px;
+    text-align: center;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    img {
+        width: 75px;
+        height: 75px;
+    }
+
+    #temp {
+        font-size: 100px;
+    }
+    #city {
+        font-size: 40px;
+    }
+    #time, #description {
+        font-size: 20px;
+        padding-bottom: 20px;
+    }
+}

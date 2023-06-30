@@ -1,29 +1,12 @@
-import { useState } from "react";
 import { SearchBox, SearchHistory, WeatherDetails } from ".";
 
-interface SidebarProps {
-  onSearch: (city: string) => void;
-}
+interface SidebarInterface {}
 
-const Sidebar: React.FC<SidebarProps> = ({ onSearch }) => {
-  const [cityName, setCityName] = useState('');
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCityName(event.target.value);
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    onSearch(cityName);
-  };
+const Sidebar: React.FC<SidebarInterface> = () => {
 
   return (
-    <aside>
-      <SearchBox
-        cityName={cityName}
-        onInputChange={handleInputChange}
-        onSubmit={handleSubmit}
-      />
+    <aside className="sidebar">
+      <SearchBox />
       <SearchHistory />
       <WeatherDetails />
     </aside>

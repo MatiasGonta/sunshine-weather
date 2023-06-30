@@ -1,20 +1,30 @@
+import { useWeather } from "@/hook";
+import { useState } from "react";
 
-interface SearchBoxProps {
-  cityName: string;
-  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (event: React.FormEvent) => void;
-}
+interface SearchBoxInterface {}
 
-const SearchBox: React.FC<SearchBoxProps> = ({ cityName, onInputChange, onSubmit }) => {
+const SearchBox: React.FC<SearchBoxInterface> = () => {
+  const { fetchWeatherByCity } = useWeather();
+  const [cityName, setCityName] = useState('');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCityName(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchWeatherByCity(cityName);
+  };
+
   return (
     <div className="search-box">
       <i className="fa-solid fa-location-dot"></i>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Enter your location"
           value={cityName}
-          onChange={onInputChange}
+          onChange={handleInputChange}
         />
         <button type="submit" className="fa-solid fa-magnifying-glass"></button>
       </form>

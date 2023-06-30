@@ -1,0 +1,19 @@
+@use './utilities/variables' as V;
+
+//WeatherDisplay
+@use './components/WeatherDisplay.scss';
+
+//Sidebar
+@use './components/Sidebar.scss';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "roboto", sans-serif;
+    text-decoration: none;
+}
+
+body{
+    background: linear-gradient(to right, rgb(20, 30, 48), rgb(36, 59, 85));
+}
