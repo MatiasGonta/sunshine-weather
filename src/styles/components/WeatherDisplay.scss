@@ -1,6 +1,8 @@
+@use '../utilities/variables.scss' as V;
+
 .weather-display {
     color: #fff;
-    width: 60vw;
+    width: 65vw;
     height: 100vh;
     padding: 50px;
     text-align: center;
@@ -17,11 +19,63 @@
     #temp {
         font-size: 100px;
     }
+
     #city {
         font-size: 40px;
     }
+    
     #time, #description {
         font-size: 20px;
         padding-bottom: 20px;
+    }
+}
+
+//Alert-Error
+.error-box {
+    position: absolute;
+    top: 10px;
+    left: 0;
+
+    display: none;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    background: V.$error-bg-color;
+    color: V.$error-text-color;
+    
+    padding: 20px 40px;
+    width: 375px;
+
+    border-radius: 4px;
+    border-right: 8px solid V.$error-text-color;
+
+    i {
+        font-size: 30px;
+        margin-left: 10px;
+    }
+    
+    span {
+        font-size: 18px;
+    }
+}
+
+.show {
+    display: flex;
+    animation: slide 1s ease forwards;
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(-100%);
+    }
+    40% {
+        transform: translateX(10%);
+    }
+    80% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(0%);
     }
 }

@@ -1,10 +1,10 @@
-import { useWeather } from "@/hook";
-import { useState } from "react";
+import { WeatherContext } from "@/context";
+import { useContext, useState } from "react";
 
 interface SearchBoxInterface {}
 
 const SearchBox: React.FC<SearchBoxInterface> = () => {
-  const { fetchWeatherByCity } = useWeather();
+  const { fetchWeatherByCity } = useContext(WeatherContext);
   const [cityName, setCityName] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

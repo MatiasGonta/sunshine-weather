@@ -1,12 +1,13 @@
-import { useWeather } from "@/hook";
+import { WeatherContext } from "@/context";
+import { useContext } from "react";
 
 export interface WeatherDetailsInterface {}
 
 const WeatherDetails: React.FC<WeatherDetailsInterface> = () => {
-    const { weatherData } = useWeather();
-    if (!weatherData) {
-        return null;
-    }
+  const { weatherData } = useContext(WeatherContext);
+  if (!weatherData) {
+    return null;
+  }
 
   return (
     <div className="weather-details">

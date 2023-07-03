@@ -1,4 +1,4 @@
-import { SearchBox, SearchHistory, WeatherDetails } from ".";
+import { SearchBox, SearchesHistory, WeatherDetails } from ".";
 
 interface SidebarInterface {}
 
@@ -7,7 +7,7 @@ const Sidebar: React.FC<SidebarInterface> = () => {
   return (
     <aside className="sidebar">
       <SearchBox />
-      <SearchHistory />
+      <SearchesHistory />
       <WeatherDetails />
     </aside>
   );

@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
-import { WeatherContextData } from '@/models';
+import { OpenWeatherAPIResponse } from '@/models';
 
 const API_KEY = 'c23b1d28140788f772fa4de635fc98af';
 
@@ -11,30 +11,33 @@ const api = axios.create({
   },
 });
 
+interface WeatherContextDataInterface {
+  weatherData: OpenWeatherAPIResponse | null;
+  error: boolean;
+  loading: boolean;
+  fetchWeatherByCoordinates: () => void;
+  fetchWeatherByCity: (city: string) => void;
+  searchesHistory: string[];
+}
+
 interface WeatherProviderInterface {
   children: JSX.Element | JSX.Element[];
 }
 
-export const WeatherContext = createContext<WeatherContextData | undefined>(undefined);
+export const WeatherContext = createContext<WeatherContextDataInterface>({
+  weatherData: null,
+  error: false,
+  loading: false,
+  fetchWeatherByCoordinates: () => {},
+  fetchWeatherByCity: () => {},
+  searchesHistory: []
+});
 
 export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }) => {
-  const [weatherData, setWeatherData] = useState<any>(null);
-  const [background, setBackground] = useState<string>('');
-  const [searchHistory, setSearchHistory] = useState<string[]>(["London","Paris","Tokyo","New York"]);
-
-  const handleBackground = (response: any) => {
-    const dateUnix = response.data.dt;
-    const timezone = response.data.timezone;
-
-    const date: Date = new Date((dateUnix + timezone) * 1000);
-    const hours: number = date.getUTCHours();
-
-    if (hours > 7 && hours < 20) {
-      setBackground(`url("./src/assets/weather-backgrounds/${response.data.weather[0].main}-day.jpg")`);
-    } else {
-      setBackground(`url("./src/assets/weather-backgrounds/${response.data.weather[0].main}-night.jpg")`);
-    }
-  }
+  const [weatherData, setWeatherData] = useState<OpenWeatherAPIResponse | null>(null);
+  const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [searchesHistory, setSearchesHistory] = useState<string[]>(['London','Paris','Tokyo','New York']);
 
   const fetchWeatherByCoordinates = async () => {
     if (navigator.geolocation) {
@@ -44,6 +47,7 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
           const longitude: number = position.coords.longitude;
 
           try {
+            setLoading(true);
             const response = await api.get('/weather', {
               params: {
                 lat: latitude,
@@ -51,28 +55,32 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
                 units: 'metric'
               },
             });
+            
+            setSearchesHistory([response.data.name, ...searchesHistory]);
+            searchesHistory.pop();
 
-            setSearchHistory([response.data.name, ...searchHistory]);
-            searchHistory.pop();
-
-            handleBackground(response);
             setWeatherData(response.data);
+            setLoading(false);
           } catch (error) {
+            setLoading(false);
             console.error('Error fetching weather data:', error);
             throw error;
           }
         },
         (error) => {
-          console.error('Error al obtener la ubicación del usuario:', error);
+          fetchWeatherByCity('New York');
+          console.error('Error on getting user location:', error);
         }
       );
     } else {
-      console.error('El navegador no admite la API de Geolocalización');
+      fetchWeatherByCity('New York');
+      console.error('The browser doesn´t support the Geolocation API');
     }
   };
 
   const fetchWeatherByCity = async (city: string) => {
     try {
+      setLoading(true);
       const response = await api.get('/weather', {
         params: {
           q: city,
@@ -80,23 +88,30 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
         },
       });
 
-      setSearchHistory([response.data.name, ...searchHistory]);
-      searchHistory.pop();
-
-      handleBackground(response);
+      if (searchesHistory.length >= 4) {
+        searchesHistory.pop();
+      }
+      setSearchesHistory([response.data.name, ...searchesHistory]);
       setWeatherData(response.data);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
+      setError(true)
+      setTimeout(()=> {
+        setError(false)
+      }, 3000)
       console.error('Error fetching weather data:', error);
       throw error;
     }
   };
 
-  const weatherContextValue: WeatherContextData = {
+  const weatherContextValue: WeatherContextDataInterface = {
     weatherData,
+    error,
+    loading,
     fetchWeatherByCoordinates,
     fetchWeatherByCity,
-    background,
-    searchHistory
+    searchesHistory
   };
 
   return (

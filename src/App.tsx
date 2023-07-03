@@ -1,26 +1,25 @@
-import React, { useEffect } from 'react';
-import { Sidebar, WeatherDisplay } from './components';
-import { useWeather } from './hook';
+import React, { useContext, useEffect } from 'react';
+import { Sidebar, WeatherDisplay, LoadingSpinner } from './components';
+import { WeatherContext } from './context';
 
 const App: React.FC = () => {
-  const { fetchWeatherByCoordinates, background } = useWeather();
+  const { fetchWeatherByCoordinates, loading } = useContext(WeatherContext);
 
   useEffect(() => {
     fetchWeatherByCoordinates();
   }, []);
 
   return (
-    <main style={{
-      backgroundImage: background,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      width: '100vw',
-      height: '100vh',
-    }}>
-      <WeatherDisplay />
-      <Sidebar />
-    </main>
+    <>
+      {(loading) ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <WeatherDisplay />
+          <Sidebar />
+        </>
+      )}
+    </>
   );
 };
 

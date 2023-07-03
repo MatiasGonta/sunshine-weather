@@ -1,1 +1,1 @@
-export * from './WeatherContextData';
+export * from './OpenWeatherAPIResponse';
