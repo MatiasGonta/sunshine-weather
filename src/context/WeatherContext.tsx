@@ -2,19 +2,9 @@ import React, { createContext, useState } from 'react';
 import axios from 'axios';
 import { OpenWeatherAPIResponse } from '@/models';
 
-const API_KEY = 'c23b1d28140788f772fa4de635fc98af';
-
-const api = axios.create({
-  baseURL: 'https://api.openweathermap.org/data/2.5',
-  params: {
-    appid: API_KEY,
-  },
-});
-
-interface WeatherContextDataInterface {
+interface WeatherContextInterface {
   weatherData: OpenWeatherAPIResponse | null;
-  error: boolean;
-  loading: boolean;
+  dataFetchingStatus: 'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS',
   fetchWeatherByCoordinates: () => void;
   fetchWeatherByCity: (city: string) => void;
   searchesHistory: string[];
@@ -24,10 +14,18 @@ interface WeatherProviderInterface {
   children: JSX.Element | JSX.Element[];
 }
 
-export const WeatherContext = createContext<WeatherContextDataInterface>({
+const API_KEY = 'c23b1d28140788f772fa4de635fc98af';
+
+const api = axios.create({
+  baseURL: 'https://api.openweathermap.org/data/2.5',
+  params: {
+    appid: API_KEY,
+  },
+});
+
+export const WeatherContext = createContext<WeatherContextInterface>({
   weatherData: null,
-  error: false,
-  loading: false,
+  dataFetchingStatus: 'INACTIVE',
   fetchWeatherByCoordinates: () => {},
   fetchWeatherByCity: () => {},
   searchesHistory: []
@@ -35,8 +33,7 @@ export const WeatherContext = createContext<WeatherContextDataInterface>({
 
 export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }) => {
   const [weatherData, setWeatherData] = useState<OpenWeatherAPIResponse | null>(null);
-  const [error, setError] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [dataFetchingStatus, setDataFetchingStatus] = useState<'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS'>('INACTIVE');
   const [searchesHistory, setSearchesHistory] = useState<string[]>(['London','Paris','Tokyo','New York']);
 
   const fetchWeatherByCoordinates = async () => {
@@ -47,7 +44,8 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
           const longitude: number = position.coords.longitude;
 
           try {
-            setLoading(true);
+            setDataFetchingStatus('LOADING');
+
             const response = await api.get('/weather', {
               params: {
                 lat: latitude,
@@ -55,14 +53,14 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
                 units: 'metric'
               },
             });
-            
+
             setSearchesHistory([response.data.name, ...searchesHistory]);
             searchesHistory.pop();
 
             setWeatherData(response.data);
-            setLoading(false);
+            setDataFetchingStatus('SUCCESS');
           } catch (error) {
-            setLoading(false);
+            setDataFetchingStatus('ERROR');
             console.error('Error fetching weather data:', error);
             throw error;
           }
@@ -80,7 +78,8 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
 
   const fetchWeatherByCity = async (city: string) => {
     try {
-      setLoading(true);
+      setDataFetchingStatus('LOADING');
+
       const response = await api.get('/weather', {
         params: {
           q: city,
@@ -93,22 +92,20 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
       }
       setSearchesHistory([response.data.name, ...searchesHistory]);
       setWeatherData(response.data);
-      setLoading(false);
+      setDataFetchingStatus('SUCCESS');
     } catch (error) {
-      setLoading(false);
-      setError(true)
+      setDataFetchingStatus('ERROR');
       setTimeout(()=> {
-        setError(false)
+        setDataFetchingStatus('INACTIVE');
       }, 3000)
       console.error('Error fetching weather data:', error);
       throw error;
     }
   };
 
-  const weatherContextValue: WeatherContextDataInterface = {
+  const weatherContextValue: WeatherContextInterface = {
     weatherData,
-    error,
-    loading,
+    dataFetchingStatus,
     fetchWeatherByCoordinates,
     fetchWeatherByCity,
     searchesHistory

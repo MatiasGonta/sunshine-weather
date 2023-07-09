@@ -1,6 +1,9 @@
 @use '../utilities/variables.scss' as V;
+@use '../utilities/mixins.scss' as M;
 
 .sidebar {
+    @include M.flex-settings(column);
+
     position: absolute;
     right: 0;
     top: 0;
@@ -11,12 +14,8 @@
     border: 1px solid rgba(255,255,255,0.18);
     box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
     background-color: rgba(110,110,100,0.25);
-    color: #d8d8d8;
+    color: V.$sidebar-text-color;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
@@ -27,10 +26,7 @@
     }
 
     .search-box {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-        align-items: center;
+        @include M.flex-settings(row, space-evenly);
 
         width: 30vw;
         height: 60px;
@@ -46,10 +42,7 @@
         }
 
         form {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
+            @include M.flex-settings(row, space-between);
 
             width: 75%;
             height: 60px;
@@ -83,23 +76,19 @@
                 cursor: pointer;
 
                 &:hover {
-                    color: #eeeeee;
+                    color: V.$sidebar-text-hover-color;
                 }
             }
         }
     }
 
     .weather-details {
+        @include M.flex-settings(column, flex-start, nowrap, flex-start);
         width: 25vw;
         margin: 2em 0;
-    
-        display: flex;
-        flex-direction: column;
 
         #cloudy, #humidity, #wind {
-            display: flex;
-            flex-direction: row;
-        
+            @include M.flex-settings(row, flex-start, nowrap, flex-start);
             margin: 1em 0;
 
             i {
@@ -108,6 +97,66 @@
             
                 align-self: center;
             }
+        }
+    }
+}
+
+@media screen and (max-width: 1050px) {
+    .search-box input {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .sidebar {
+        @include M.flex-settings(row, center, wrap);
+        top: 35vh;
+    
+        width: 100%;
+        height: auto;
+
+        .search-box {
+            min-width: 70vw;
+            margin: 20px 100px;
+        }
+    
+        .search-history { 
+            ul {
+                min-width: 30vw;
+                border: none;
+            }
+            margin: 2em 0;
+        }
+        
+        .weather-details {
+            min-width: 25vw;
+            height: 347px;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .sidebar {
+        @include M.flex-settings(column);
+
+        .search-box {
+            margin: 20px 0;
+
+            input {
+                font-size: 15px;
+            }
+        }
+    
+        .search-history {
+            ul {
+                width: 50vw;
+                border-bottom: 1px solid rgb(255,255,255,0.6);
+            }
+            margin: 0;
+        }
+    
+        .weather-details {
+            width: 50vw;
         }
     }
 }
