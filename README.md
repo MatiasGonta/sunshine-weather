@@ -27,7 +27,12 @@ Sunshine Weather is an interactive web page that provides weather information fo
 - `src/components`: Contains reusable components used in different parts of the application.
 - `src/context`: Contains context providers and consumers used for state management.
 - `src/models`: Contains TypeScript interfaces or types used for defining data structures.
+- `services`: Contains the weather service responsible for fetching data from the OpenWeatherMap API.
 - `src/styles`: Contains Sass style files for styling the application.
+
+## HTML-CSS-JavaScript Version of the Project
+
+![See the HTML, CSS and JavaScript version](https://github.com/MatiasGonta/WeatherApp)
 
 ## Authors
 

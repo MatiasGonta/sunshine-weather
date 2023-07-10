@@ -4,16 +4,16 @@ import { useContext, useState } from "react";
 interface SearchBoxInterface {}
 
 const SearchBox: React.FC<SearchBoxInterface> = () => {
-  const { fetchWeatherByCity } = useContext(WeatherContext);
+  const { handleFetchWeatherByCity } = useContext(WeatherContext);
   const [cityName, setCityName] = useState('');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>):void => {
     setCityName(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent):void => {
     e.preventDefault();
-    fetchWeatherByCity(cityName);
+    handleFetchWeatherByCity(cityName);
   };
 
   return (

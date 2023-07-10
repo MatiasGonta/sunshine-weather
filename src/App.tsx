@@ -3,10 +3,10 @@ import { Sidebar, WeatherDisplay, LoadingSpinner } from './components';
 import { WeatherContext } from './context';
 
 const App: React.FC = () => {
-  const { fetchWeatherByCoordinates, dataFetchingStatus } = useContext(WeatherContext);
+  const { handleFetchWeatherByCoordinates, dataFetchingStatus } = useContext(WeatherContext);
 
   useEffect(() => {
-    fetchWeatherByCoordinates();
+    handleFetchWeatherByCoordinates();
   }, []);
 
   return (

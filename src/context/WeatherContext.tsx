@@ -1,12 +1,13 @@
-import React, { createContext, useState } from 'react';
-import axios from 'axios';
+import React, { createContext, useEffect, useState } from 'react';
+import { AxiosResponse } from 'axios';
 import { OpenWeatherAPIResponse } from '@/models';
+import { fetchWeatherByCity, fetchWeatherByCoordinates } from '@/services';
 
 interface WeatherContextInterface {
   weatherData: OpenWeatherAPIResponse | null;
   dataFetchingStatus: 'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS',
-  fetchWeatherByCoordinates: () => void;
-  fetchWeatherByCity: (city: string) => void;
+  handleFetchWeatherByCoordinates: () => void;
+  handleFetchWeatherByCity: (city: string) => void;
   searchesHistory: string[];
 }
 
@@ -14,29 +15,27 @@ interface WeatherProviderInterface {
   children: JSX.Element | JSX.Element[];
 }
 
-const API_KEY = 'c23b1d28140788f772fa4de635fc98af';
-
-const api = axios.create({
-  baseURL: 'https://api.openweathermap.org/data/2.5',
-  params: {
-    appid: API_KEY,
-  },
-});
-
 export const WeatherContext = createContext<WeatherContextInterface>({
   weatherData: null,
   dataFetchingStatus: 'INACTIVE',
-  fetchWeatherByCoordinates: () => {},
-  fetchWeatherByCity: () => {},
+  handleFetchWeatherByCoordinates: () => {},
+  handleFetchWeatherByCity: () => {},
   searchesHistory: []
 });
 
 export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }) => {
   const [weatherData, setWeatherData] = useState<OpenWeatherAPIResponse | null>(null);
   const [dataFetchingStatus, setDataFetchingStatus] = useState<'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS'>('INACTIVE');
-  const [searchesHistory, setSearchesHistory] = useState<string[]>(['London','Paris','Tokyo','New York']);
+  const [searchesHistory, setSearchesHistory] = useState<string[]>(() => {
+    const savedSearches = localStorage.getItem('searchesHistory');
+    return savedSearches ? JSON.parse(savedSearches) : ['London', 'Paris', 'Tokyo', 'New York'];
+  });
 
-  const fetchWeatherByCoordinates = async () => {
+  useEffect(() => {
+    localStorage.setItem('searchesHistory', JSON.stringify(searchesHistory));
+  }, [searchesHistory]);
+
+  const handleFetchWeatherByCoordinates = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position: GeolocationPosition) => {
@@ -46,51 +45,46 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
           try {
             setDataFetchingStatus('LOADING');
 
-            const response = await api.get('/weather', {
-              params: {
-                lat: latitude,
-                lon: longitude,
-                units: 'metric'
-              },
-            });
+            const response: AxiosResponse<OpenWeatherAPIResponse> = await fetchWeatherByCoordinates(latitude, longitude);
 
-            setSearchesHistory([response.data.name, ...searchesHistory]);
-            searchesHistory.pop();
+            if (searchesHistory[0] !== response.data.name) {
+              setSearchesHistory([response.data.name, ...searchesHistory]);
+              searchesHistory.pop();
+            }
 
             setWeatherData(response.data);
             setDataFetchingStatus('SUCCESS');
           } catch (error) {
             setDataFetchingStatus('ERROR');
+
             console.error('Error fetching weather data:', error);
             throw error;
           }
         },
         (error) => {
-          fetchWeatherByCity('New York');
+          handleFetchWeatherByCity('New York');
           console.error('Error on getting user location:', error);
         }
       );
     } else {
-      fetchWeatherByCity('New York');
+      handleFetchWeatherByCity('New York');
       console.error('The browser doesn´t support the Geolocation API');
     }
   };
 
-  const fetchWeatherByCity = async (city: string) => {
+  const handleFetchWeatherByCity = async (city: string) => {
     try {
       setDataFetchingStatus('LOADING');
 
-      const response = await api.get('/weather', {
-        params: {
-          q: city,
-          units: 'metric'
-        },
-      });
+      const response: AxiosResponse<OpenWeatherAPIResponse> = await fetchWeatherByCity(city);
 
-      if (searchesHistory.length >= 4) {
-        searchesHistory.pop();
+      if (searchesHistory[0] !== response.data.name) {
+        if (searchesHistory.length >= 4) {
+          searchesHistory.pop();
+        }
+        setSearchesHistory([response.data.name, ...searchesHistory]);
       }
-      setSearchesHistory([response.data.name, ...searchesHistory]);
+
       setWeatherData(response.data);
       setDataFetchingStatus('SUCCESS');
     } catch (error) {
@@ -98,6 +92,7 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
       setTimeout(()=> {
         setDataFetchingStatus('INACTIVE');
       }, 3000)
+
       console.error('Error fetching weather data:', error);
       throw error;
     }
@@ -106,8 +101,8 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
   const weatherContextValue: WeatherContextInterface = {
     weatherData,
     dataFetchingStatus,
-    fetchWeatherByCoordinates,
-    fetchWeatherByCity,
+    handleFetchWeatherByCoordinates,
+    handleFetchWeatherByCity,
     searchesHistory
   };
 

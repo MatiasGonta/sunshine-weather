@@ -87,10 +87,6 @@
         width: 100%;
         height: 35vh;
         padding: 0 25px;
-
-        #temp {
-            font-size: 60px;
-        }
     
         #time, #description {
             font-size: 15px;
@@ -106,11 +102,11 @@
         }
     
         #temp {
-            font-size: 80px;
+            font-size: 75px;
         }
     
         #city {
-            font-size: 30px;
+            font-size: 25px;
         }
         
         #time, #description {
@@ -128,11 +124,7 @@
         }
     
         #city {
-            font-size: 30px;
-        }
-        
-        #time, #description {
-            font-size: 15px;
+            font-size: 20px;
         }
     }
 
