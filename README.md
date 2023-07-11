@@ -32,7 +32,7 @@ Sunshine Weather is an interactive web page that provides weather information fo
 
 ## HTML-CSS-JavaScript Version of the Project
 
-<a href="https://github.com/MatiasGonta/WeatherApp" target="_blank">See the HTML, CSS and JavaScript version</a>
+<a href="https://github.com/MatiasGonta/sunshine-weather-html-css-js" target="_blank">See the HTML, CSS and JavaScript version</a>
 
 ## Authors
 
