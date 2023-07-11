@@ -54,12 +54,15 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
   }
 
   return (
-    <main>
+    <main style={{
+      backgroundImage: handleBackground(weatherData.weather[0].main),
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      width: '100%',
+      height: '100%',
+    }}>
       <article style={{
-        backgroundImage: handleBackground(weatherData.weather[0].main),
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
         width: '100%',
         height: '100%',
       }}>
