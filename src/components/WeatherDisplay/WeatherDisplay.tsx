@@ -1,9 +1,6 @@
 import { WeatherContext } from "@/context";
+import { TypeWithKey } from "@/models";
 import { useContext } from "react";
-
-interface WeatherResponseNamesInterface {
-  [key: string]: string;
-}
 
 interface WeatherDisplayInterface {}
 
@@ -13,7 +10,7 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
     return null;
   }
   
-  const weatherResponseNames: WeatherResponseNamesInterface  = {
+  const weatherResponses: TypeWithKey<string> = {
     Clear: 'Clear',
     Clouds: 'Clouds',
     Rain: 'Rain',
@@ -47,12 +44,12 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
   const handleBackground = (weatherName:string) => {
     if (weatherName !== 'Thunderstorm' && weatherName !== 'Tornado' && weatherName !== 'Ash') {
       if (hours > 7 && hours < 20) {
-        return `url("./src/assets/weather-backgrounds/${weatherResponseNames[weatherName]}-day.jpg")`;
+        return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}-day.jpg")`;
       } else {
-        return `url("./src/assets/weather-backgrounds/${weatherResponseNames[weatherName]}-night.jpg")`;
+        return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}-night.jpg")`;
       }
     } else {
-      return `url("./src/assets/weather-backgrounds/${weatherResponseNames[weatherName]}.jpg")`;
+      return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}.jpg")`;
     }
   }
 
@@ -79,7 +76,7 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
             <p id="time">{`${weekDayName} ${date.getUTCDate()}, ${monthName} ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}`}</p>
           </div>
           <div>
-            <img src={`./src/assets/weather-icons/${weatherResponseNames[weatherData.weather[0].main]}.png`} alt={weatherData.weather[0].description} />
+            <img src={`./src/assets/weather-icons/${weatherResponses[weatherData.weather[0].main]}.png`} alt={weatherData.weather[0].description} />
             <p id="description">{weatherData.weather[0].description}</p>
           </div>
         </section>
