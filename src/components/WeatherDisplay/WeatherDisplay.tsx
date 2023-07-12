@@ -28,6 +28,18 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
     Tornado: 'Tornado'
   };
 
+  const handleBackground = (weatherName:string) => {
+    if (weatherName !== 'Thunderstorm' && weatherName !== 'Tornado' && weatherName !== 'Ash') {
+      if (hours > 7 && hours < 20) {
+        return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}-day.jpg")`;
+      } else {
+        return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}-night.jpg")`;
+      }
+    } else {
+      return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}.jpg")`;
+    }
+  }
+
   const dateUnix: number = weatherData.dt;
   const timezone: number = weatherData.timezone;
   
@@ -40,18 +52,6 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
   const monthName = monthNames[date.getUTCMonth()];
   const hours = date.getUTCHours();
   const minutes = date.getUTCMinutes();
-
-  const handleBackground = (weatherName:string) => {
-    if (weatherName !== 'Thunderstorm' && weatherName !== 'Tornado' && weatherName !== 'Ash') {
-      if (hours > 7 && hours < 20) {
-        return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}-day.jpg")`;
-      } else {
-        return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}-night.jpg")`;
-      }
-    } else {
-      return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}.jpg")`;
-    }
-  }
 
   return (
     <main style={{

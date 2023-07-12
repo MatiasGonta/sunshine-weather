@@ -1,4 +1,4 @@
-import { OpenWeatherAPIResponse } from "@/models";
+import { OpenWeatherAPIResponse, TypeWithKey } from "@/models";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 const API_KEY: string = 'c23b1d28140788f772fa4de635fc98af';
@@ -10,17 +10,17 @@ const api: AxiosInstance = axios.create({
   },
 });
 
-export const fetchWeatherByCoordinates = async (latitude: number, longitude: number): Promise<AxiosResponse<OpenWeatherAPIResponse>> => {
+export const fetchWeatherByCoordinates = (coords: TypeWithKey<number>): Promise<AxiosResponse<OpenWeatherAPIResponse>> => {
     return api.get('/weather', {
         params: {
-          lat: latitude,
-          lon: longitude,
+          lat: coords.latitude,
+          lon: coords.longitude,
           units: 'metric'
         },
     });
 };
   
-export const fetchWeatherByCity = async (city: string): Promise<AxiosResponse<OpenWeatherAPIResponse>> => {
+export const fetchWeatherByCity = (city: string): Promise<AxiosResponse<OpenWeatherAPIResponse>> => {
     return api.get('/weather', {
         params: {
           q: city,

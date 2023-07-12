@@ -1,13 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { OpenWeatherAPIResponse } from '@/models';
+import { OpenWeatherAPIResponse, TypeWithKey } from '@/models';
 import { fetchWeatherByCity, fetchWeatherByCoordinates } from '@/services';
 
 interface WeatherContextInterface {
   weatherData: OpenWeatherAPIResponse | null;
   dataFetchingStatus: 'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS',
-  handleFetchWeatherByCoordinates: () => void;
-  handleFetchWeatherByCity: (city: string) => void;
+  handleFetchWeather: (fetchInfo: string | TypeWithKey<number>) => void;
   searchesHistory: string[];
 }
 
@@ -18,8 +17,7 @@ interface WeatherProviderInterface {
 export const WeatherContext = createContext<WeatherContextInterface>({
   weatherData: null,
   dataFetchingStatus: 'INACTIVE',
-  handleFetchWeatherByCoordinates: () => {},
-  handleFetchWeatherByCity: () => {},
+  handleFetchWeather: () => {},
   searchesHistory: []
 });
 
@@ -35,48 +33,17 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
     localStorage.setItem('searchesHistory', JSON.stringify(searchesHistory));
   }, [searchesHistory]);
 
-  const handleFetchWeatherByCoordinates = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (position: GeolocationPosition) => {
-          const latitude: number = position.coords.latitude;
-          const longitude: number = position.coords.longitude;
-
-          try {
-            setDataFetchingStatus('LOADING');
-
-            const response: AxiosResponse<OpenWeatherAPIResponse> = await fetchWeatherByCoordinates(latitude, longitude);
-
-            if (searchesHistory[0] !== response.data.name) {
-              setSearchesHistory([response.data.name, ...searchesHistory]);
-              searchesHistory.pop();
-            }
-
-            setWeatherData(response.data);
-            setDataFetchingStatus('SUCCESS');
-          } catch (error) {
-            setDataFetchingStatus('ERROR');
-
-            console.error('Error fetching weather data:', error);
-            throw error;
-          }
-        },
-        (error) => {
-          handleFetchWeatherByCity('New York');
-          console.error('Error on getting user location:', error);
-        }
-      );
-    } else {
-      handleFetchWeatherByCity('New York');
-      console.error('The browser doesn´t support the Geolocation API');
-    }
-  };
-
-  const handleFetchWeatherByCity = async (city: string) => {
+  const handleFetchWeather = async (fetchInfo: string | TypeWithKey<number>) => {
     try {
       setDataFetchingStatus('LOADING');
+      
+      let response:AxiosResponse<OpenWeatherAPIResponse>;
 
-      const response: AxiosResponse<OpenWeatherAPIResponse> = await fetchWeatherByCity(city);
+      if (typeof fetchInfo === 'string') {
+        response = await fetchWeatherByCity(fetchInfo);
+      } else {
+        response = await fetchWeatherByCoordinates(fetchInfo);
+      }
 
       if (searchesHistory[0] !== response.data.name) {
         if (searchesHistory.length >= 4) {
@@ -101,8 +68,7 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
   const weatherContextValue: WeatherContextInterface = {
     weatherData,
     dataFetchingStatus,
-    handleFetchWeatherByCoordinates,
-    handleFetchWeatherByCity,
+    handleFetchWeather,
     searchesHistory
   };
 

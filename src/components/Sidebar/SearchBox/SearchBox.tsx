@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 interface SearchBoxInterface {}
 
 const SearchBox: React.FC<SearchBoxInterface> = () => {
-  const { handleFetchWeatherByCity } = useContext(WeatherContext);
+  const { handleFetchWeather } = useContext(WeatherContext);
   const [cityName, setCityName] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>):void => {
@@ -13,7 +13,7 @@ const SearchBox: React.FC<SearchBoxInterface> = () => {
 
   const handleSubmit = (e: React.FormEvent):void => {
     e.preventDefault();
-    handleFetchWeatherByCity(cityName);
+    handleFetchWeather(cityName);
   };
 
   return (
