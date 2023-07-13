@@ -67,7 +67,7 @@ Sunshine Weather es una página web interactiva que proporciona información met
 - Actualizaciones meteorológicas en tiempo real.
 - Historial de búsqueda para realizar un seguimiento de las búsquedas anteriores.
 - Información meteorológica detallada que incluye temperatura, humedad, velocidad del viento y descripción.
-- Diseño receptivo para una experiencia perfecta en diferentes dispositivos.
+- Diseño responsive para una experiencia perfecta en diferentes dispositivos.
 
 ## Tecnologías utilizadas
 
