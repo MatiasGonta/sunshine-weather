@@ -1,6 +1,17 @@
 @use '../utilities/variables.scss' as V;
 @use '../utilities/mixins.scss' as M;
 
+$sidebar-bg-color: rgba(110,110,100,0.25);
+$sidebar-border-color: rgba(255,255,255,0.18);
+$sidebar-shadow-color: rgba(0,0,0,0.3);
+$sidebar-text-color: #d8d8d8;
+$sidebar-text-hover-color: #eeeeee;
+
+$search-box-color: #4d4d4d;
+$search-button-bg-color: #c3dee9;
+
+$search-history-border: 1px solid rgb(255,255,255,0.6);
+
 .sidebar {
     @include M.flex-settings(column);
 
@@ -11,11 +22,11 @@
     width: 35vw;
     height: 100vh;
 
-    border: 1px solid rgba(255,255,255,0.18);
-    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.3);
+    border: 1px solid $sidebar-border-color;
+    box-shadow: 0 8px 32px 0 $sidebar-shadow-color;
 
-    background-color: rgba(110,110,100,0.25);
-    color: V.$sidebar-text-color;
+    background-color: $sidebar-bg-color;
+    color: $sidebar-text-color;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
@@ -32,7 +43,7 @@
         height: 60px;
         margin: 20px 0;
         background: #fff;
-        color: #4d4d4d;
+        color: $search-box-color;
         border-radius: 50px;
         opacity: 0.6;
 
@@ -58,7 +69,7 @@
                 min-height: 40px;
                 border-radius: 50%;
                 color: V.$first-bg-color;
-                background-color: #c3dee9;
+                background-color: $search-button-bg-color;
                 cursor: pointer;
             }
         }
@@ -69,14 +80,14 @@
             width: 25vw;
             padding-bottom: 1em;
             margin: 2em 0;
-            border-bottom: 1px solid rgb(255,255,255,0.6);
+            border-bottom: $search-history-border;
 
             li {
                 margin: 2.5em 0;
                 cursor: pointer;
 
                 &:hover {
-                    color: V.$sidebar-text-hover-color;
+                    color: $sidebar-text-hover-color;
                 }
             }
         }
@@ -87,7 +98,9 @@
         width: 25vw;
         margin: 2em 0;
 
-        #cloudy, #humidity, #wind {
+        #cloudy,
+        #humidity,
+        #wind {
             @include M.flex-settings(row, flex-start, nowrap, flex-start);
             margin: 1em 0;
 
@@ -150,7 +163,7 @@
         .search-history {
             ul {
                 width: 50vw;
-                border-bottom: 1px solid rgb(255,255,255,0.6);
+                border-bottom: $search-history-border;
             }
             margin: 0;
         }

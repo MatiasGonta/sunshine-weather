@@ -1,75 +1,94 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import { OpenWeatherAPIResponse, TypeWithKey } from '@/models';
 import { fetchWeatherByCity, fetchWeatherByCoordinates } from '@/services';
 
 interface WeatherContextInterface {
-  weatherData: OpenWeatherAPIResponse | null;
-  dataFetchingStatus: 'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS',
+  weather: Weather;
   handleFetchWeather: (fetchInfo: string | TypeWithKey<number>) => void;
-  searchesHistory: string[];
 }
 
 interface WeatherProviderInterface {
   children: JSX.Element | JSX.Element[];
 }
 
+type Weather = {
+  data: OpenWeatherAPIResponse | null,
+  status: 'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS',
+  history: string[]
+}
+
 export const WeatherContext = createContext<WeatherContextInterface>({
-  weatherData: null,
-  dataFetchingStatus: 'INACTIVE',
-  handleFetchWeather: () => {},
-  searchesHistory: []
+  weather: {
+    data: null,
+    status: 'INACTIVE',
+    history: []
+  },
+  handleFetchWeather: () => {}
 });
 
 export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }) => {
-  const [weatherData, setWeatherData] = useState<OpenWeatherAPIResponse | null>(null);
-  const [dataFetchingStatus, setDataFetchingStatus] = useState<'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS'>('INACTIVE');
-  const [searchesHistory, setSearchesHistory] = useState<string[]>(() => {
-    const savedSearches = localStorage.getItem('searchesHistory');
-    return savedSearches ? JSON.parse(savedSearches) : ['London', 'Paris', 'Tokyo', 'New York'];
-  });
+  const savedHistory = localStorage.getItem('searchesHistory');
 
-  useEffect(() => {
-    localStorage.setItem('searchesHistory', JSON.stringify(searchesHistory));
-  }, [searchesHistory]);
+  const [weather, setWeather] = useState<Weather>({
+    data: null,
+    status: 'INACTIVE',
+    history: savedHistory ? JSON.parse(savedHistory) : ['London', 'Paris', 'Tokyo', 'New York', 'New York']
+  });
 
   const handleFetchWeather = async (fetchInfo: string | TypeWithKey<number>) => {
     try {
-      setDataFetchingStatus('LOADING');
-      
-      let response:AxiosResponse<OpenWeatherAPIResponse>;
-
+      setWeather((prevWeather) => ({
+        ...prevWeather,
+        status: 'LOADING',
+      }));
+  
+      let response: AxiosResponse<OpenWeatherAPIResponse>;
+  
       if (typeof fetchInfo === 'string') {
         response = await fetchWeatherByCity(fetchInfo);
       } else {
         response = await fetchWeatherByCoordinates(fetchInfo);
       }
-
-      if (searchesHistory[0] !== response.data.name) {
-        if (searchesHistory.length >= 4) {
-          searchesHistory.pop();
+  
+      // Handle searches history
+      if (weather.history[0] !== response.data.name) {
+        let newHistory = [response.data.name, ...weather.history];
+        if (newHistory.length > 4) {
+          newHistory = newHistory.slice(0, 4);
         }
-        setSearchesHistory([response.data.name, ...searchesHistory]);
+  
+        setWeather((prevWeather) => ({
+          ...prevWeather,
+          history: newHistory,
+        }));
       }
+  
+      localStorage.setItem('searchesHistory', JSON.stringify(weather.history));
 
-      setWeatherData(response.data);
-      setDataFetchingStatus('SUCCESS');
+      setWeather((prevWeather) => ({
+        ...prevWeather,
+        data: response.data,
+        status: 'SUCCESS',
+      }));
     } catch (error) {
-      setDataFetchingStatus('ERROR');
-      setTimeout(()=> {
-        setDataFetchingStatus('INACTIVE');
-      }, 3000)
-
-      console.error('Error fetching weather data:', error);
-      throw error;
+      setWeather((prevWeather) => ({
+        ...prevWeather,
+        status: 'ERROR',
+      }));
+  
+      setTimeout(() => {
+        setWeather((prevWeather) => ({
+          ...prevWeather,
+          status: 'INACTIVE',
+        }));
+      }, 3000);
     }
   };
 
   const weatherContextValue: WeatherContextInterface = {
-    weatherData,
-    dataFetchingStatus,
-    handleFetchWeather,
-    searchesHistory
+    weather,
+    handleFetchWeather
   };
 
   return (

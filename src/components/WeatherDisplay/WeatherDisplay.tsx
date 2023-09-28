@@ -5,8 +5,8 @@ import { useContext } from "react";
 interface WeatherDisplayInterface {}
 
 const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
-  const { weatherData, dataFetchingStatus } = useContext(WeatherContext);
-  if (!weatherData) {
+  const { weather } = useContext(WeatherContext);
+  if (!weather.data) {
     return null;
   }
   
@@ -28,7 +28,7 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
     Tornado: 'Tornado'
   };
 
-  const handleBackground = (weatherName:string) => {
+  const handleBackground = (weatherName: string) => {
     if (weatherName !== 'Thunderstorm' && weatherName !== 'Tornado' && weatherName !== 'Ash') {
       if (hours > 7 && hours < 20) {
         return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}-day.jpg")`;
@@ -40,47 +40,51 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
     }
   }
 
-  const dateUnix: number = weatherData.dt;
-  const timezone: number = weatherData.timezone;
+  // Calculate current time of weather
+  const dateUnix: number = weather.data.dt;
+  const timezone: number = weather.data.timezone;
   
   const date: Date = new Date((dateUnix + timezone) * 1000);
 
-  const weekDayNames: string[] = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  const monthNames: string[] = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const weekDayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     
-  const weekDayName = weekDayNames[date.getUTCDay()];
-  const monthName = monthNames[date.getUTCMonth()];
-  const hours = date.getUTCHours();
-  const minutes = date.getUTCMinutes();
+  const weekDayName: string = weekDayNames[date.getUTCDay()];
+  const monthName: string = monthNames[date.getUTCMonth()];
+  const hours: number = date.getUTCHours();
+  const minutes: number = date.getUTCMinutes();
+
+  // Current time of weather
+  const time = `${weekDayName} ${date.getUTCDate()}, ${monthName} ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}`;
 
   return (
     <main style={{
-      backgroundImage: handleBackground(weatherData.weather[0].main),
+      backgroundImage: handleBackground(weather.data.weather[0].main),
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
       width: '100%',
       height: '100%',
     }}>
-      <article style={{
-        width: '100%',
-        height: '100%',
-      }}>
-        <div className={(dataFetchingStatus === 'ERROR') ? "error-box show" : "error-box"}>
+      <article className="weather-display">
+        <div className={weather.status === 'ERROR' ? "error-box show" : "error-box"}>
           <span>Your location was not founded</span>
           <i className="fas fa-exclamation-circle"></i>
         </div>
-        <section className="weather-display">
+        <section>
           <div>
-            <p id="temp">{parseInt(weatherData.main.temp)}°C</p>
+            <p id="temp">{parseInt(weather.data.main.temp)}°C</p>
           </div>
           <div>
-            <p id="city">{weatherData.name}</p>
-            <p id="time">{`${weekDayName} ${date.getUTCDate()}, ${monthName} ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}`}</p>
+            <p id="city">{weather.data.name}</p>
+            <p id="time">{time}</p>
           </div>
           <div>
-            <img src={`./src/assets/weather-icons/${weatherResponses[weatherData.weather[0].main]}.png`} alt={weatherData.weather[0].description} />
-            <p id="description">{weatherData.weather[0].description}</p>
+            <img
+              src={`./src/assets/weather-icons/${weatherResponses[weather.data.weather[0].main]}.png`}
+              alt={weather.data.weather[0].description}
+            />
+            <p id="description">{weather.data.weather[0].description}</p>
           </div>
         </section>
       </article>

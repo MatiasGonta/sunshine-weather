@@ -11,20 +11,20 @@ const api: AxiosInstance = axios.create({
 });
 
 export const fetchWeatherByCoordinates = (coords: TypeWithKey<number>): Promise<AxiosResponse<OpenWeatherAPIResponse>> => {
-    return api.get('/weather', {
-        params: {
-          lat: coords.latitude,
-          lon: coords.longitude,
-          units: 'metric'
-        },
-    });
+  return api.get('/weather', {
+    params: {
+      lat: coords.latitude,
+      lon: coords.longitude,
+      units: 'metric'
+    },
+  });
 };
-  
+
 export const fetchWeatherByCity = (city: string): Promise<AxiosResponse<OpenWeatherAPIResponse>> => {
-    return api.get('/weather', {
-        params: {
-          q: city,
-          units: 'metric'
-        },
-    });
+  return api.get('/weather', {
+    params: {
+      q: city,
+      units: 'metric'
+    },
+  });
 };

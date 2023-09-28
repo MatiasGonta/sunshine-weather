@@ -4,7 +4,7 @@ import { WeatherContext } from './context';
 import { TypeWithKey } from './models';
 
 const App: React.FC = () => {
-  const { handleFetchWeather, dataFetchingStatus } = useContext(WeatherContext);
+  const { weather, handleFetchWeather } = useContext(WeatherContext);
 
   useEffect(() => {
     function success(position: GeolocationPosition) {
@@ -24,7 +24,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {(dataFetchingStatus === 'LOADING') ? (
+      {(weather.status === 'LOADING') ? (
         <LoadingSpinner />
       ) : (
         <>
