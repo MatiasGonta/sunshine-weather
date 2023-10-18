@@ -8,7 +8,7 @@
 
 Sunshine Weather is an interactive web page that provides weather information for any location in the world. Users can easily search for a city or country and get real-time weather updates, including temperature, humidity, wind speed, and description. It has a simple and effective user interface, which includes a main weather display component, a sidebar with an entry to search for cities or countries, a search history section and another with detailed weather information.
 
-![Sunshine-Weather!](./sunshine-weather-screenshot.png)
+![Sunshine-Weather!](./sunshine-weather-screenshot.png){width=100px}
 
 ## Features
 
