@@ -12,10 +12,12 @@ interface WeatherProviderInterface {
   children: JSX.Element | JSX.Element[];
 }
 
-type Weather = {
-  data: OpenWeatherAPIResponse | null,
-  status: 'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS',
-  history: string[]
+type WeatherStatus = 'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS';
+
+interface Weather {
+  data: OpenWeatherAPIResponse | null;
+  status: WeatherStatus;
+  history: string[];
 }
 
 export const WeatherContext = createContext<WeatherContextInterface>({
@@ -28,12 +30,13 @@ export const WeatherContext = createContext<WeatherContextInterface>({
 });
 
 export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }) => {
+  const defaultHistory = ['London', 'Paris', 'Tokyo', 'New York', 'New York'];
   const savedHistory = localStorage.getItem('searchesHistory');
 
   const [weather, setWeather] = useState<Weather>({
     data: null,
     status: 'INACTIVE',
-    history: savedHistory ? JSON.parse(savedHistory) : ['London', 'Paris', 'Tokyo', 'New York', 'New York']
+    history: savedHistory ? JSON.parse(savedHistory) : defaultHistory
   });
 
   const handleFetchWeather = async (fetchInfo: string | TypeWithKey<number>) => {
@@ -52,8 +55,11 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
       }
   
       // Handle searches history
-      if (weather.history[0] !== response.data.name) {
-        let newHistory = [response.data.name, ...weather.history];
+      const lastSearch = weather.history[0];
+      const newSearch = response.data.name;
+
+      if (lastSearch !== newSearch) {
+        let newHistory = [newSearch, ...weather.history];
         if (newHistory.length > 4) {
           newHistory = newHistory.slice(0, 4);
         }
