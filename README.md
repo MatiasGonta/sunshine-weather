@@ -17,6 +17,7 @@ Sunshine Weather is an interactive web page that provides weather information fo
 - Real-time weather updates.
 - Search history to keep track of previous searches.
 - Detailed weather information including temperature, humidity, wind speed, and description.
+- Styles written following the BEM (Block Element Modifier) methodology for a more scalable structure and maintenance.
 - Responsive design for a seamless experience on different devices.
 
 ## Technologies Used
@@ -67,6 +68,7 @@ Sunshine Weather es una página web interactiva que proporciona información met
 - Actualizaciones meteorológicas en tiempo real.
 - Historial de búsqueda para realizar un seguimiento de las búsquedas anteriores.
 - Información meteorológica detallada que incluye temperatura, humedad, velocidad del viento y descripción.
+- Estilos escritos siguiendo la metodología BEM (Block Element Modifier) para una estructura y mantenimiento más organizados y escalables.
 - Diseño responsive para una experiencia perfecta en diferentes dispositivos.
 
 ## Tecnologías utilizadas
