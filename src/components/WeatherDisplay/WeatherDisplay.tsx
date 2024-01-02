@@ -1,5 +1,5 @@
 import { WeatherContext } from "@/context";
-import { TypeWithKey } from "@/models";
+import { TypeWithKey, WeatherCondition } from "@/models";
 import { useContext } from "react";
 
 interface WeatherDisplayInterface {}
@@ -10,7 +10,7 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
     return null;
   }
   
-  const weatherResponses: TypeWithKey<string> = {
+  const weatherResponses: TypeWithKey<WeatherCondition> = {
     Clear: 'Clear',
     Clouds: 'Clouds',
     Rain: 'Rain',
@@ -28,7 +28,7 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
     Tornado: 'Tornado'
   };
 
-  const handleBackground = (weatherName: string) => {
+  const handleBackground = (weatherName: WeatherCondition) => {
     if (weatherName !== 'Thunderstorm' && weatherName !== 'Tornado' && weatherName !== 'Ash') {
       if (hours > 7 && hours < 20) {
         return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}-day.jpg")`;

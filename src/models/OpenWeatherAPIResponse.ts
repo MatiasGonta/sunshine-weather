@@ -1,4 +1,22 @@
-export type OpenWeatherAPIResponse = {
+export type WeatherCondition =
+  | 'Clear'
+  | 'Clouds'
+  | 'Rain'
+  | 'Drizzle'
+  | 'Thunderstorm'
+  | 'Snow'
+  | 'Mist'
+  | 'Fog'
+  | 'Haze'
+  | 'Smoke'
+  | 'Dust'
+  | 'Sand'
+  | 'Ash'
+  | 'Squall'
+  | 'Tornado'
+;
+
+export interface OpenWeatherAPIResponse {
   coord: {
     lon: number;
     lat: number;
@@ -6,7 +24,7 @@ export type OpenWeatherAPIResponse = {
   weather: [
     {
       id: number;
-      main: string;
+      main: WeatherCondition;
       description: string;
       icon: string;
     }
