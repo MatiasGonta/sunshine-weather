@@ -22,50 +22,63 @@ const Sidebar: React.FC<SidebarInterface> = () => {
 
   return (
     <aside className="sidebar">
-      <div className="search-box">
+
+      <div className="sidebar__search-box">
         <i className="fa-solid fa-location-dot"></i>
-        <form onSubmit={handleSubmit}>
+        <form className="sidebar__search-box__form" onSubmit={handleSubmit}>
           <input
+            className="sidebar__search-box__input"
             type="text"
             placeholder="Enter your location"
             value={cityName}
             onChange={handleInputChange}
           />
-          <button type="submit" className="fa-solid fa-magnifying-glass"></button>
+          <button type="submit" className="sidebar__search-box__button fa-solid fa-magnifying-glass"></button>
         </form>
       </div>
-      <div className="search-history">
-        <h3>Search History</h3>
-        <ul>
+
+      <div className="sidebar__search-history">
+        <h3 className="sidebar__title">Search History</h3>
+        <ul className="sidebar__search-history__list">
           {
-            weather.history.map((search, index) => <li key={index} onClick={() => handleFetchWeather(search)}>{search}</li>)
+            weather.history.map((search, index) => (
+                <li
+                  key={index}
+                  className="sidebar__search-history__list__item"
+                  onClick={() => handleFetchWeather(search)}
+                >
+                  {search}
+                </li>)
+              )
           }
         </ul>
       </div>
-      <div className="weather-details">
-        <h3>Weather Details</h3>
-        <div id="cloudy">
-          <i className="fa-solid fa-cloud"></i>
+
+      <div className="sidebar__weather-details">
+        <h3 className="sidebar__title">Weather Details</h3>
+        <div className="sidebar__weather-details__detail">
+          <i className="sidebar__weather-details__detail__icon fa-solid fa-cloud"></i>
           <div>
             <span>{weather.data.clouds.all}%</span>
             <p>Cloudy</p>
           </div>
         </div>
-        <div id="humidity">
-          <i className="fa-solid fa-water"></i>
+        <div className="sidebar__weather-details__detail">
+          <i className="sidebar__weather-details__detail__icon fa-solid fa-water"></i>
           <div>
             <span>{weather.data.main.humidity}%</span>
             <p>Humidity</p>
           </div>
         </div>
-        <div id="wind">
-          <i className="fa-solid fa-wind"></i>
+        <div className="sidebar__weather-details__detail">
+          <i className="sidebar__weather-details__detail__icon fa-solid fa-wind"></i>
           <div>
             <span>{parseInt(weather.data.wind.speed)}Km/h</span>
             <p>Wind Speed</p>
           </div>
         </div>
       </div>
+      
     </aside>
   );
 };

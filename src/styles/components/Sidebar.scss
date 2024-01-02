@@ -21,7 +21,7 @@ $search-history-border: 1px solid rgb(255,255,255,0.6);
 
     width: 35vw;
     height: 100vh;
-
+    
     border: 1px solid $sidebar-border-color;
     box-shadow: 0 8px 32px 0 $sidebar-shadow-color;
 
@@ -29,14 +29,16 @@ $search-history-border: 1px solid rgb(255,255,255,0.6);
     color: $sidebar-text-color;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    overflow-y: auto;
 
     z-index: 1;
 
-    h3 {
+    &__title {
         font-size: 22px;
     }
+    
 
-    .search-box {
+    &__search-box {
         @include M.flex-settings(row, space-evenly);
 
         width: 30vw;
@@ -52,37 +54,37 @@ $search-history-border: 1px solid rgb(255,255,255,0.6);
             font-size: 22px;
         }
 
-        form {
+        &__form {
             @include M.flex-settings(row, space-between);
 
             width: 75%;
             height: 60px;
             border-radius: 50px;
+        }
 
-            input {
-                width: 85%;
-                height: 60px;
-            }
+        &__input {
+            width: 85%;
+            height: 60px;
+        }
 
-            button{
-                min-width: 40px;
-                min-height: 40px;
-                border-radius: 50%;
-                color: V.$first-bg-color;
-                background-color: $search-button-bg-color;
-                cursor: pointer;
-            }
+        &__button{
+            min-width: 40px;
+            min-height: 40px;
+            border-radius: 50%;
+            color: V.$first-bg-color;
+            background-color: $search-button-bg-color;
+            cursor: pointer;
         }
     }
     
-    .search-history {
-        ul {
+    &__search-history {
+        &__list {
             width: 25vw;
             padding-bottom: 1em;
             margin: 2em 0;
             border-bottom: $search-history-border;
 
-            li {
+            &__item {
                 margin: 2.5em 0;
                 cursor: pointer;
 
@@ -93,18 +95,16 @@ $search-history-border: 1px solid rgb(255,255,255,0.6);
         }
     }
 
-    .weather-details {
+    &__weather-details {
         @include M.flex-settings(column, flex-start, nowrap, flex-start);
         width: 25vw;
         margin: 2em 0;
 
-        #cloudy,
-        #humidity,
-        #wind {
+        &__detail {
             @include M.flex-settings(row, flex-start, nowrap, flex-start);
             margin: 1em 0;
 
-            i {
+            &__icon {
                 font-size: 22px;
                 margin-right: 10px;
             
@@ -115,7 +115,7 @@ $search-history-border: 1px solid rgb(255,255,255,0.6);
 }
 
 @media screen and (max-width: 1050px) {
-    .search-box input {
+    .sidebar__search-box__input {
         font-size: 18px;
     }
 }
@@ -128,20 +128,21 @@ $search-history-border: 1px solid rgb(255,255,255,0.6);
         width: 100%;
         height: auto;
 
-        .search-box {
+        &__search-box {
             min-width: 70vw;
             margin: 20px 100px;
         }
     
-        .search-history { 
-            ul {
+        &__search-history { 
+            margin: 2em 0;
+
+            &__list {
                 min-width: 30vw;
                 border: none;
             }
-            margin: 2em 0;
         }
         
-        .weather-details {
+        &__weather-details {
             min-width: 25vw;
             height: 347px;
         }
@@ -152,23 +153,24 @@ $search-history-border: 1px solid rgb(255,255,255,0.6);
     .sidebar {
         @include M.flex-settings(column);
 
-        .search-box {
+        &__search-box {
             margin: 20px 0;
 
-            input {
+            &__input {
                 font-size: 15px;
             }
         }
     
-        .search-history {
-            ul {
+        &__search-history {
+            margin: 0;
+
+            &__list {
                 width: 50vw;
                 border-bottom: $search-history-border;
             }
-            margin: 0;
         }
     
-        .weather-details {
+        &__weather-details {
             width: 50vw;
         }
     }

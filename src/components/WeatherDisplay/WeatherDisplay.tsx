@@ -58,36 +58,30 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
   const time = `${weekDayName} ${date.getUTCDate()}, ${monthName} ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}`;
 
   return (
-    <main style={{
-      backgroundImage: handleBackground(weather.data.weather[0].main),
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      width: '100%',
-      height: '100%',
-    }}>
-      <article className="weather-display">
-        <div className={weather.status === 'ERROR' ? "error-box show" : "error-box"}>
-          <span>Your location was not founded</span>
-          <i className="fas fa-exclamation-circle"></i>
+    <main style={{ backgroundImage: handleBackground(weather.data.weather[0].main) }}>
+      <section>
+        <div className={`error-box ${weather.status === 'ERROR' && "error-box--show"}`}>
+          <span className="error-box__text">Your location was not founded</span>
+          <i className="error-box__icon fas fa-exclamation-circle"></i>
         </div>
-        <section>
+        <article className="weather-display">
           <div>
-            <p id="temp">{parseInt(weather.data.main.temp)}°C</p>
+            <p className="weather-display__temp">{parseInt(weather.data.main.temp)}°C</p>
           </div>
           <div>
-            <p id="city">{weather.data.name}</p>
-            <p id="time">{time}</p>
+            <p className="weather-display__city">{weather.data.name}</p>
+            <p className="weather-display__time">{time}</p>
           </div>
           <div>
             <img
+              className="weather-display__img"
               src={`./src/assets/weather-icons/${weatherResponses[weather.data.weather[0].main]}.png`}
               alt={weather.data.weather[0].description}
             />
-            <p id="description">{weather.data.weather[0].description}</p>
+            <p className="weather-display__description">{weather.data.weather[0].description}</p>
           </div>
-        </section>
-      </article>
+        </article>
+      </section>
     </main>
   );
 };
