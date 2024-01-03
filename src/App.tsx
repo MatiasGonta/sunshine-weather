@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Sidebar, WeatherDisplay, LoadingSpinner } from './components';
 import { WeatherContext } from './context';
-import { TypeWithKey } from './models';
+import { TypeWithKey, WeatherStatus } from './models';
 
 const App: React.FC = () => {
   const { weather, handleFetchWeather } = useContext(WeatherContext);
@@ -24,7 +24,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {(weather.status === 'LOADING') ? (
+      {(weather.status === WeatherStatus.LOADING) ? (
         <LoadingSpinner />
       ) : (
         <>

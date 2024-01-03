@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { OpenWeatherAPIResponse, TypeWithKey } from '@/models';
+import { OpenWeatherAPIResponse, Weather, TypeWithKey, WeatherStatus } from '@/models';
 import { fetchWeatherByCity, fetchWeatherByCoordinates } from '@/services';
 
 interface WeatherContextInterface {
@@ -12,18 +12,11 @@ interface WeatherProviderInterface {
   children: JSX.Element | JSX.Element[];
 }
 
-type WeatherStatus = 'INACTIVE' | 'LOADING' | 'ERROR' | 'SUCCESS';
-
-interface Weather {
-  data: OpenWeatherAPIResponse | null;
-  status: WeatherStatus;
-  history: string[];
-}
-
 export const WeatherContext = createContext<WeatherContextInterface>({
   weather: {
     data: null,
-    status: 'INACTIVE',
+    status: WeatherStatus.INACTIVE,
+    statusMessage: '',
     history: []
   },
   handleFetchWeather: () => {}
@@ -35,7 +28,8 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
 
   const [weather, setWeather] = useState<Weather>({
     data: null,
-    status: 'INACTIVE',
+    status: WeatherStatus.INACTIVE,
+    statusMessage: '',
     history: savedHistory ? JSON.parse(savedHistory) : defaultHistory
   });
 
@@ -43,7 +37,7 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
     try {
       setWeather((prevWeather) => ({
         ...prevWeather,
-        status: 'LOADING',
+        status: WeatherStatus.LOADING,
       }));
   
       let response: AxiosResponse<OpenWeatherAPIResponse>;
@@ -52,6 +46,13 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
         response = await fetchWeatherByCity(fetchInfo);
       } else {
         response = await fetchWeatherByCoordinates(fetchInfo);
+      }
+
+      let newWeatherState: Weather = {
+        data: response.data,
+        status: WeatherStatus.SUCCESS,
+        statusMessage: response.statusText,
+        history: weather.history
       }
   
       // Handle searches history
@@ -64,29 +65,31 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
           newHistory = newHistory.slice(0, 4);
         }
   
-        setWeather((prevWeather) => ({
-          ...prevWeather,
-          history: newHistory,
-        }));
+        newWeatherState = {
+          ...newWeatherState,
+          history: newHistory
+        }
       }
   
       localStorage.setItem('searchesHistory', JSON.stringify(weather.history));
 
-      setWeather((prevWeather) => ({
-        ...prevWeather,
-        data: response.data,
-        status: 'SUCCESS',
-      }));
+      setWeather(newWeatherState);
     } catch (error) {
+      const errorMessage = error.response.data.message;
+
+      const formattedErrorMessage = errorMessage.substring(0,1).toUpperCase() + errorMessage.substring(1);
+
       setWeather((prevWeather) => ({
         ...prevWeather,
-        status: 'ERROR',
+        status: WeatherStatus.ERROR,
+        statusMessage: formattedErrorMessage
       }));
   
       setTimeout(() => {
         setWeather((prevWeather) => ({
           ...prevWeather,
-          status: 'INACTIVE',
+          status: WeatherStatus.INACTIVE,
+          statusMessage: ''
         }));
       }, 3000);
     }
