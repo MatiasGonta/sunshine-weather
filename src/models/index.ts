@@ -1,2 +1,2 @@
-export * from './OpenWeatherAPIResponse';
 export * from './TypeWithKey';
+export * from './Weather';

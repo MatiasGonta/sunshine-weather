@@ -1,5 +1,5 @@
 import { WeatherContext } from "@/context";
-import { TypeWithKey, WeatherCondition } from "@/models";
+import { TypeWithKey, WeatherCondition, WeatherStatus } from "@/models";
 import { useContext } from "react";
 
 interface WeatherDisplayInterface {}
@@ -60,8 +60,8 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
   return (
     <main style={{ backgroundImage: handleBackground(weather.data.weather[0].main) }}>
       <section>
-        <div className={`error-box ${weather.status === 'ERROR' && "error-box--show"}`}>
-          <span className="error-box__text">Your location was not founded</span>
+        <div className={`error-box ${weather.status === WeatherStatus.ERROR && "error-box--show"}`}>
+          <span className="error-box__text">{weather.statusMessage}</span>
           <i className="error-box__icon fas fa-exclamation-circle"></i>
         </div>
         <article className="weather-display">
