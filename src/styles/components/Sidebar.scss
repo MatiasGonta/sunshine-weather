@@ -127,7 +127,7 @@ $search-history-border: 1px solid rgb(255,255,255,0.6);
         top: 35vh;
     
         width: 100%;
-        height: auto;
+        height: 70%;
 
         &__search-box {
             min-width: 70vw;
@@ -150,7 +150,7 @@ $search-history-border: 1px solid rgb(255,255,255,0.6);
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 648px) {
     .sidebar {
         @include M.flex-settings(column);
 
