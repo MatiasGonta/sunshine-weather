@@ -1,13 +1,13 @@
-@use './utilities/variables' as V;
+@use './utilities/_variables' as V;
 
 //LoadingSpinner
-@use './components/LoadingSpinner.scss';
+@use './layouts/_LoadingSpinner.scss';
 
 //WeatherDisplay
-@use './components/WeatherDisplay.scss';
+@use './layouts/_WeatherDisplay.scss';
 
 //Sidebar
-@use './components/Sidebar.scss';
+@use './layouts/_Sidebar.scss';
 
 * {
     margin: 0;
