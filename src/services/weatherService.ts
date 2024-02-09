@@ -1,12 +1,10 @@
 import { OpenWeatherAPIResponse, TypeWithKey } from "@/models";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
-const API_KEY: string = 'c23b1d28140788f772fa4de635fc98af';
-
 const api: AxiosInstance = axios.create({
   baseURL: 'https://api.openweathermap.org/data/2.5',
   params: {
-    appid: API_KEY,
+    appid: import.meta.env.VITE_SOME_KEY,
   },
 });
 

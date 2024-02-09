@@ -1,5 +1,5 @@
 import { WeatherContext } from "@/context";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 interface SidebarInterface { }
 
@@ -9,14 +9,9 @@ const Sidebar: React.FC<SidebarInterface> = () => {
     return null;
   }
 
-  const [cityName, setCityName] = useState('');
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setCityName(e.target.value);
-  };
-
-  const handleSubmit = (e: React.FormEvent): void => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    const cityName: string = (e.target as HTMLFormElement)[0].value;
     handleFetchWeather(cityName);
   };
 
@@ -38,7 +33,7 @@ const Sidebar: React.FC<SidebarInterface> = () => {
             strokeLinejoin="round"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" stroke-width="0" fill="currentColor" />
+            <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" strokeWidth="0" fill="currentColor" />
           </svg>
         </div>
         <form className="sidebar__search-box__form" onSubmit={handleSubmit}>
@@ -46,8 +41,8 @@ const Sidebar: React.FC<SidebarInterface> = () => {
             className="sidebar__search-box__input"
             type="text"
             placeholder="Enter your location"
-            value={cityName}
-            onChange={handleInputChange}
+            // value={cityName}
+            // onChange={handleInputChange}
           />
           <button type="submit" className="sidebar__search-box__button">
             <svg
@@ -104,7 +99,7 @@ const Sidebar: React.FC<SidebarInterface> = () => {
               strokeLinejoin="round"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M10.04 4.305c2.195 -.667 4.615 -.224 6.36 1.176c1.386 1.108 2.188 2.686 2.252 4.34l.003 .212l.091 .003c2.3 .107 4.143 1.961 4.25 4.27l.004 .211c0 2.407 -1.885 4.372 -4.255 4.482l-.21 .005h-11.878l-.222 -.008c-2.94 -.11 -5.317 -2.399 -5.43 -5.263l-.005 -.216c0 -2.747 2.08 -5.01 4.784 -5.417l.114 -.016l.07 -.181c.663 -1.62 2.056 -2.906 3.829 -3.518l.244 -.08z" stroke-width="0" fill="currentColor" />
+              <path d="M10.04 4.305c2.195 -.667 4.615 -.224 6.36 1.176c1.386 1.108 2.188 2.686 2.252 4.34l.003 .212l.091 .003c2.3 .107 4.143 1.961 4.25 4.27l.004 .211c0 2.407 -1.885 4.372 -4.255 4.482l-.21 .005h-11.878l-.222 -.008c-2.94 -.11 -5.317 -2.399 -5.43 -5.263l-.005 -.216c0 -2.747 2.08 -5.01 4.784 -5.417l.114 -.016l.07 -.181c.663 -1.62 2.056 -2.906 3.829 -3.518l.244 -.08z" strokeWidth="0" fill="currentColor" />
             </svg>
           </div>
 

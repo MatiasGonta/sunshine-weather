@@ -19,19 +19,21 @@ const App: React.FC = () => {
     function error() {
       handleFetchWeather('New York');
     }
-    navigator.geolocation.getCurrentPosition(success,error)
+    navigator.geolocation.getCurrentPosition(success, error)
   }, []);
 
   return (
     <>
-      {(weather.status === WeatherStatus.LOADING) ? (
-        <LoadingSpinner />
-      ) : (
-        <>
-          <WeatherDisplay />
-          <Sidebar />
-        </>
-      )}
+      {
+        weather.status === WeatherStatus.LOADING
+          ? <LoadingSpinner />
+          : (
+            <>
+              <WeatherDisplay />
+              <Sidebar />
+            </>
+          )
+      }
     </>
   );
 };
