@@ -29,16 +29,22 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
   };
 
   const handleBackground = (weatherName: WeatherCondition) => {
+    let imgURL;
+
     if (weatherName !== 'Thunderstorm' && weatherName !== 'Tornado' && weatherName !== 'Ash') {
       if (hours > 7 && hours < 20) {
-        return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}-day.jpg")`;
+        imgURL = new URL(`/src/assets/weather-backgrounds/${weatherResponses[weatherName]}-day.jpg`, import.meta.url).href;
       } else {
-        return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}-night.jpg")`;
+        imgURL = new URL(`/src/assets/weather-backgrounds/${weatherResponses[weatherName]}-night.jpg`, import.meta.url).href;
       }
     } else {
-      return `url("./src/assets/weather-backgrounds/${weatherResponses[weatherName]}.jpg")`;
+      imgURL = new URL(`/src/assets/weather-backgrounds/${weatherResponses[weatherName]}.jpg`, import.meta.url).href;
     }
+
+    return `url("${imgURL}")`;
   }
+
+  const weatherName = weatherResponses[weather.data.weather[0].main];
 
   // Calculate current time of weather
   const dateUnix: number = weather.data.dt;
@@ -58,7 +64,7 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
   const time = `${weekDayName} ${date.getUTCDate()}, ${monthName} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 
   return (
-    <main style={{ backgroundImage: handleBackground(weather.data.weather[0].main) }}>
+    <main style={{ backgroundImage: handleBackground(weatherName) }}>
       <section>
         <div className={`error-box ${weather.status === WeatherStatus.ERROR && "error-box--show"}`}>
           <span className="error-box__text">{weather.statusMessage}</span>
@@ -79,7 +85,8 @@ const WeatherDisplay: React.FC<WeatherDisplayInterface> = () => {
           <div>
             <img
               className="weather-display__img"
-              src={`./src/assets/weather-icons/${weatherResponses[weather.data.weather[0].main]}.png`}
+              // src={`/src/assets/weather-icons/${weatherResponses[weather.data.weather[0].main]}.png`}
+              src={new URL(`/src/assets/weather-icons/${weatherName}.png`, import.meta.url).href}
               alt={weather.data.weather[0].description}
             />
             <p className="weather-display__description">{weather.data.weather[0].description}</p>

@@ -6,7 +6,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerInterface> = () => {
     <div className="loading-box">
       <img
         className="loading-box__logo"
-        src="/src/assets/sunshine.png"
+        src={new URL(`/src/assets/sunshine.png`, import.meta.url).href}
         alt="sunshine-logo"
       />
       <div className="loading-box__spinner">
