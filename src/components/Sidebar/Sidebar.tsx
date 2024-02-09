@@ -4,15 +4,15 @@ import { useContext } from "react";
 interface SidebarInterface { }
 
 const Sidebar: React.FC<SidebarInterface> = () => {
-  const { weather, handleFetchWeather } = useContext(WeatherContext);
+  const { weather } = useContext(WeatherContext);
   if (!weather.data) {
     return null;
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    const cityName: string = (e.target as HTMLFormElement)[0].value;
-    handleFetchWeather(cityName);
+    const cityName: string = new FormData(e.currentTarget).get('search')!.toString();
+    window.location.href = `/?search=${cityName}`;
   };
 
   return (
@@ -38,11 +38,10 @@ const Sidebar: React.FC<SidebarInterface> = () => {
         </div>
         <form className="sidebar__search-box__form" onSubmit={handleSubmit}>
           <input
+            name="search"
             className="sidebar__search-box__input"
             type="text"
             placeholder="Enter your location"
-            // value={cityName}
-            // onChange={handleInputChange}
           />
           <button type="submit" className="sidebar__search-box__button">
             <svg
@@ -73,7 +72,7 @@ const Sidebar: React.FC<SidebarInterface> = () => {
               <li
                 key={index}
                 className="sidebar__search-history__list__item"
-                onClick={() => handleFetchWeather(search)}
+                onClick={() => window.location.href = `/?search=${search}`}
               >
                 {search}
               </li>)

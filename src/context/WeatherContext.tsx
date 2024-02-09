@@ -74,8 +74,8 @@ export const WeatherProvider: React.FC<WeatherProviderInterface> = ({ children }
       localStorage.setItem('searchesHistory', JSON.stringify(weather.history));
 
       setWeather(newWeatherState);
-    } catch (error) {
-      const errorMessage = error.response.data.message;
+    } catch (error: any) {
+      const errorMessage = (error.response && error.response.data && error.response.data.message) || 'An unknown error occurred';
 
       const formattedErrorMessage = errorMessage.substring(0,1).toUpperCase() + errorMessage.substring(1);
 
